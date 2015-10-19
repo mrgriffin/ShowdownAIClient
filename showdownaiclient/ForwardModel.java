@@ -24,5 +24,5 @@ public class ForwardModel {
     //call damage calc
     //call onAfterDamage
     //call onResidual
-    End Turn
+    //End Turn
 }
