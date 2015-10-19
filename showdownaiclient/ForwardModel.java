@@ -18,5 +18,11 @@ public class ForwardModel {
     //Process Effects
     //Prompt for decisions
     //Decide turn order
-    //
+    //call onBeforeMove, onSwitch
+    //check resistances
+    //call onBeforeDamage
+    //call damage calc
+    //call onAfterDamage
+    //call onResidual
+    End Turn
 }
