@@ -17,12 +17,16 @@ public class ForwardModel {
     
     //Process Effects
     //Prompt for decisions
-    //Decide turn order
     //call onBeforeMove, onSwitch
+    //Decide turn order
+    //Waking up also happens here
     //check resistances
+    //First pokemon moves
     //call onBeforeDamage
     //call damage calc
     //call onAfterDamage
-    //call onResidual
+    //call onResidual, 
+    //decrement pokemon volatiles
+    //Decrement world values
     //End Turn
 }
