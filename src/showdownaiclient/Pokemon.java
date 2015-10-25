@@ -7,6 +7,8 @@ package showdownaiclient;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -16,8 +18,10 @@ import org.json.JSONObject;
 public class Pokemon {
     //Intrinsic values
     String species;
+    int level;
     String type1;
     String type2;
+    //atk, def, spa, spd, spe
     HashMap<String, Integer> Stats;
     Ability abi;
     double height;
@@ -31,7 +35,7 @@ public class Pokemon {
     //Battle values
     int hp;
     HashMap<String, Integer> boost;
-    // "", "sleep", "poison", "burn", "paralysis", etc.
+    // "", "slp", "psn", "brn", "par", etc.
     String status;
     int statusRemaining;
     Item hitem;
@@ -41,7 +45,7 @@ public class Pokemon {
     //vtrapped: Volatile trapping (arena trap)
     //aurabreak: affected by aura break
     HashMap<String, Integer> volatiles;
-    //Very volatile, reset each turn
+    //Very volatile, reevaluate each turn
     boolean moved;
     //full stat names, lowercase, special abbreviated to s, weight, accuracy, and evasion included
     HashMap<String, Double> tMultipliers;
@@ -52,8 +56,27 @@ public class Pokemon {
     boolean indimmune;
     //Generic pokemon (opponent's)
     
+    public void printinfo(){
+        System.out.println("Species: " + species);
+        System.out.println("Level " + level);
+        System.out.println("Typing: " + type1 + "-" + type2);
+        for(Entry<String, Integer> e:Stats.entrySet()){
+            System.out.println(e.getKey() + ": " + e.getValue());
+        }
+        System.out.println("Ability: " + abi.name);
+        System.out.println("Current Status: " + hp + "/" + maxHp);
+        System.out.println("Item: " + hitem.name);
+        System.out.println("Moves:");
+        for(Move m:moves){
+            m.printinfo();
+        }
+        System.out.println();
+    }
+    
     //deep copy constructor
     public Pokemon(Pokemon p){
+        try{
+        level = p.level;
         species = p.species;
         type1 = p.type1;
         type2 = p.type2;
@@ -82,14 +105,163 @@ public class Pokemon {
         addEffectResistances = new HashMap<String, Double>();
         itemlocked = false;
         indimmune = false;
+        }
+        catch(Exception e){
+            e.printStackTrace(System.out);
+        }
+    }
+    
+    public Pokemon(JSONObject currentdata){
+        try{
+            //Testing
+            System.out.println("JSONConstructor!");
+            String details = currentdata.getString("details");
+            species = details.substring(0, details.indexOf(",")).toLowerCase();
+            details = details.substring(details.indexOf(",") + 3);
+            System.out.println(details);
+            if(details.contains(",")){
+                level = Integer.parseInt(details.substring(0, details.indexOf(",")));
+            }
+            else{
+                level = Integer.parseInt(details.trim());
+            }
+            details = details.substring(details.length() - 1);
+            
+            if(details.equals("M")){
+                gender = 1;
+            }
+            else if(details.equals("F")){
+                gender = 2;
+            }
+            else{
+                gender = 0;
+            }
+            JSONObject jstats = currentdata.getJSONObject("stats");
+            //testing
+            System.out.println(jstats);
+            String statnames[] = JSONObject.getNames(jstats);
+            Stats = new HashMap<String, Integer>();
+            for(String s: statnames){
+                Stats.put(s, jstats.getInt(s));
+            }
+            abi = new Ability(currentdata.getString("baseAbility"));
+            hitem = new Item(currentdata.getString("item"));
+            details = currentdata.getString("condition");
+            hp = Integer.parseInt(details.substring(0, details.indexOf("/")));
+            int mhealthend = details.length();
+            if(details.contains(" ")){
+                mhealthend = details.indexOf(" ");
+            }
+            maxHp = Integer.parseInt(details.substring(details.indexOf("/")+1, mhealthend));
+            if(details.contains(" ")){
+                status = details.substring(mhealthend + 1, details.length());
+            }
+            iconsumed = false;
+            statusRemaining = -1;
+            boost = new HashMap<String, Integer>();
+            JSONArray mov = currentdata.getJSONArray("moves");
+            moves = new ArrayList<Move>();
+            for(int i = 0; i < mov.length(); i++){
+                moves.add(new Move(mov.getString(i)));
+            }
+            JSONObject speciesdata = Databases.pokedex.get(species.toLowerCase().replaceAll("-", ""));
+            JSONArray stypes = speciesdata.getJSONArray("types");
+            type1 = stypes.getString(0);
+            type2 = "";
+            if(stypes.length() == 2){
+                type2 = stypes.getString(1);
+            }
+            height = speciesdata.getDouble("heightm");
+            weight = speciesdata.getDouble("weightkg");
+            volatiles = new HashMap<String, Integer>();
+            moved = false;
+            tMultipliers = new HashMap<String, Double>();
+            addTypeResistances = new HashMap<String, Double>();
+            addEffectResistances = new HashMap<String, Double>();
+            itemlocked = false;
+            indimmune = false;
+            
+        }
+        catch(Exception e){
+            e.printStackTrace(System.out);
+        }
+    }
+    //Generic pokemon, theirs
+    //assumes pokemon has 31 IVs across the board, as well as 100 EVs
+    public Pokemon(String pspecies, int level){
+        try{
+            species = pspecies;
+            JSONObject speciesdata = Databases.pokedex.get(pspecies.toLowerCase().replaceAll("-", ""));
+            JSONArray stypes = speciesdata.getJSONArray("types");
+            type1 = stypes.getString(0);
+            type2 = "";
+            if(stypes.length() == 2){
+                type2 = stypes.getString(1);
+            }
+            height = speciesdata.getDouble("heightm");
+            weight = speciesdata.getDouble("weightkg");
+            volatiles = new HashMap<String, Integer>();
+            moved = false;
+            tMultipliers = new HashMap<String, Double>();
+            addTypeResistances = new HashMap<String, Double>();
+            addEffectResistances = new HashMap<String, Double>();
+            itemlocked = false;
+            indimmune = false;
+            iconsumed = false;
+            statusRemaining = -1;
+            boost = new HashMap<String, Integer>();
+            gender = 0;
+            status = "";
+            JSONObject jstats = speciesdata.getJSONObject("baseStats");
+            //testing
+            System.out.println(jstats);
+            String statnames[] = JSONObject.getNames(jstats);
+            Stats = new HashMap<String, Integer>();
+            for(String s: statnames){
+                if(s.equals("hp") == false){
+                    Stats.put(s, (((jstats.getInt(s) * 2) + 56) * level/100)+5);
+                }
+                else{
+                    //The fundamental assumption is that a pokemon will be at max health at the beginning of a battle
+                    maxHp =  (((jstats.getInt(s) * 2) + 56) * level/100)+10 + level;
+                    hp = maxHp;
+                }
+            }
+            JSONObject abichoices = speciesdata.getJSONObject("abilities");
+            String[] choicekeys = JSONObject.getNames(abichoices);
+            abi = new Ability(abichoices.getString(choicekeys[(int)Math.random() * choicekeys.length]));
+            moves = new ArrayList<Move>();
+            moves.add(new Move(type1, true));
+            moves.add(new Move(type1, false));
+            if(type2.equals("") == false){
+                moves.add(new Move(type2, true));
+                moves.add(new Move(type2, false));
+            }
+        }
+        catch(Exception e){
+            System.out.println("Error parsing species data");
+        }
+    }
+    
+    public void learnMove(String name){
+        boolean found = false;
+        for(Move m:moves){
+            if(m.name.equals(name)){
+                found = true;
+            }
+        }
+        if(found == false){
+            moves.add(new Move(name));
+        }
+    }
+    
+    //will parse JSON
+    public void updateByJSON(JSONObject jsono){
         
     }
     
-    public Pokemon(JSONObject speciesData, int level){
-        
-    }
-    //Specific Pokemon (ours)
-    public Pokemon(JSONObject speciesData, int level, int[] ivs, int[] evs, Ability abi){
+    //will parse the string
+    public void updateByOpcode(String input){
         
     }
     
@@ -119,7 +291,7 @@ public class Pokemon {
         //call onBoost here
     }
     
-    /**Does the same thing as boostStat, but bypasses onBoos**/
+    /**Does the same thing as boostStat, but bypasses onBoost**/
     public void boostStatBypass(String name, int val){
         if(boost.containsKey(name)){
             boost.put(name, boost.get(name) + val);

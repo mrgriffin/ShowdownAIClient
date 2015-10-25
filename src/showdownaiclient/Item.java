@@ -10,5 +10,9 @@ package showdownaiclient;
  * @author Scott
  */
 public class Item {
+    public Item(String s){
+        name = s;
+    }
+    String name;
     String category;
 }

@@ -91,7 +91,7 @@ public class PSDAISocket extends WebSocketClient {
 
     @Override
     public void onClose(int i, String string, boolean bln) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

@@ -16,6 +16,10 @@ public class RandomAgent extends Agent {
     public String decide() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    public String decide(Pokemon p){
+        return "move" + (int) Math.floor(Math.random() * p.moves.size());
+    }
 
     @Override
     public void updateWorldState(String input) {

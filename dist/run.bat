@@ -1,0 +1,1 @@
+java -jar "C:\Users\Admin\Documents\NetBeansProjects\ShowdownAIClient\dist\ShowdownAIClient.jar"

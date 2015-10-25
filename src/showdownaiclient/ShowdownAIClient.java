@@ -32,6 +32,7 @@ public class ShowdownAIClient {
         // TODO code application logic here
         PSDAISocket sock = null;
         try{
+            Databases.init();
             URI uri = new URI("ws://localhost:8000/showdown/websocket");
             sock = new PSDAISocket(uri);
             sock.connect();

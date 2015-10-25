@@ -13,12 +13,14 @@ public class Room {
     String id;
     String name;
     String whoami;
-    int type;
-    int mode;
+    String myusername;
+    Agent player;
     public Room(String rname, String uname){
         id = rname;
+        myusername = uname;
+        player = new TestingAgent();
     }
     public void process(String line){
-        System.out.println(line);
+        player.updateWorldState(line);
     }
 }
