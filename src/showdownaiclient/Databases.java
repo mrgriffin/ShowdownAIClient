@@ -45,7 +45,7 @@ public class Databases{
     
     public static void init(){
         try{
-            File f = new File("typechart.js");
+            File f = new File("test/typechart.js");
             BufferedReader br = new BufferedReader(new FileReader(f));
             String line = null;
             String tcproto = "";
@@ -70,7 +70,7 @@ public class Databases{
             System.out.println("Error initializing typechart");
         }
         try{
-            File f = new File("pokedex.js");
+            File f = new File("test/pokedex.js");
             BufferedReader br = new BufferedReader(new FileReader(f));
             String line = null;
             pokedex = new HashMap<String, JSONObject>();
@@ -86,7 +86,7 @@ public class Databases{
             System.out.println("Error initializing pokedex");
         }
         try{
-            File f = new File("moves.js");
+            File f = new File("test/moves.js");
             BufferedReader br = new BufferedReader(new FileReader(f));
             String line = null;
             String tcproto = "";

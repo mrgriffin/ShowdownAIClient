@@ -14,24 +14,12 @@ import java.util.HashMap;
  * @author Admin
  */
 
-interface MoveEvent{
-    void onUseMove(WorldState w, Pokemon p1, Pokemon p2, Move m);
-}
-interface WorldEffect{
-    void onTurn(WorldState w);
-}
-interface SwitchEvent{
-    void onSwitch(WorldState w, Pokemon p1, Pokemon p2);
-}
-interface PokemonUpdate{
-    void onUpdatePokemon(WorldState w, Pokemon p1, Pokemon p2);
-}
-interface ItemUpdate{
-    void onItemUse(Pokemon eater, Item i);
-}
-interface BoostEvent{
-    void onBoost(Pokemon target, Pokemon source, String stat, int amount);
-}
+
+
+
+
+
+
 
 
 public class Ability {
@@ -40,7 +28,7 @@ public class Ability {
     MoveEvent onAfterDamage;
     MoveEvent onBeforeDamage;
     //
-    WorldEffect onTurnStart;
+    WorldEvent onTurnStart;
     //called before priority calculation
     MoveEvent onBeforeMove;
     //Calls to onupdatepokemon are typically made before decision and after every event

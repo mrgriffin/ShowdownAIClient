@@ -5,14 +5,19 @@
  */
 package showdownaiclient;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Admin
  */
 public abstract class Agent {
-    String pnum;
-    Pokemon[] mypokes;
-    Pokemon[] opponent;
-    public abstract String decide();
+    String roomname;
+    PSDAISocket sock;
+    public Agent(String r, PSDAISocket socks){
+        roomname = r;
+        sock = socks;
+    }
+    public abstract String decide(ArrayList<String> choices);
     public abstract void updateWorldState(String input);
 }

@@ -46,6 +46,7 @@ public class PSDAISocket extends WebSocketClient {
     final String OUTPUT_CHALLENGE = "|/challenge ";
     final String OUTPUT_ACCEPT = "|/accept ";
     final String OUTPUT_REJECT = "|/reject ";
+    final String OUTPUT_SEARCH = "|/search ";
     final String COMMAND_LOGIN = "AILogin";
     final String COMMAND_JOIN = "AIJoin";
     final String COMMAND_HELP = "AIHelp";
@@ -54,8 +55,10 @@ public class PSDAISocket extends WebSocketClient {
     final String COMMAND_REJECT = "AIReject";
     final String COMMAND_ACCEPTALL = "AIAcceptAll";
     final String COMMAND_SEARCH = "AISearch";
+    final String COMMAND_AIMODE = "AIMode";
     private ArrayList<Format> formats;
     private HashMap<String, Room> battles;
+    AgentType a;
     
     public PSDAISocket(URI uri){
         super(uri);
@@ -67,6 +70,7 @@ public class PSDAISocket extends WebSocketClient {
         battles = new HashMap<String, Room>();
         roomcode = false;
         croom = "";
+        a = AgentType.AGENT_TESTING;
     }
     
     @Override
@@ -190,7 +194,7 @@ public class PSDAISocket extends WebSocketClient {
         String roomname = input.substring(1);
         roomcode = true;
         if(battles.containsKey(roomname) == false){
-            battles.put(roomname, new Room(roomname, username));
+            battles.put(roomname, new Room(roomname, username, a, this));
             System.out.println("Room " + roomname + " has been processed");
         }
         croom = roomname;
@@ -214,7 +218,7 @@ public class PSDAISocket extends WebSocketClient {
             return inchallenge(input);
         }
         else if(input.startsWith(INPUT_FORMATLIST)){
-            return formatlist(input);
+            //return formatlist(input);
         }
         else if(input.startsWith(";;")){
             return false;
@@ -260,11 +264,12 @@ public class PSDAISocket extends WebSocketClient {
         System.out.println("Here are the commands you can use:");
         System.out.println(COMMAND_LOGIN + " logs you in");
         System.out.println(COMMAND_JOIN + " lets you join a room");
-        System.out.println(COMMAND_CHALLENGE + " lets you challenge another user"); //NYI
-        System.out.println(COMMAND_ACCEPT + " lets you accept a challenge"); //NYI
+        System.out.println(COMMAND_CHALLENGE + " lets you challenge another user");
+        System.out.println(COMMAND_ACCEPT + " lets you accept a challenge");
         System.out.println(COMMAND_REJECT + " lets you reject a challenge"); //NYI
-        System.out.println(COMMAND_ACCEPTALL + " automatically accepts challenges"); //NYI
+        System.out.println(COMMAND_ACCEPTALL + " automatically accepts challenges");
         System.out.println(COMMAND_SEARCH + " finds an opponent through MM"); //NYI
+        System.out.println(COMMAND_AIMODE + " allows you to change the AI module");
         return false;
     }
     
@@ -284,6 +289,32 @@ public class PSDAISocket extends WebSocketClient {
         return false;
     }
     
+    private boolean changemode(String output){
+        System.out.println("Which mode would you like to change to?  Type in the number");
+        System.out.println("1: MANUAL");
+        System.out.println("2: TESTING");
+        System.out.println("3: RANDOM");
+        Scanner in = new Scanner(System.in);
+        int pick = Integer.parseInt(in.nextLine());
+        switch (pick){
+            case 1:
+                a = AgentType.AGENT_MANUAL;
+            case 2:
+                a = AgentType.AGENT_TESTING;
+            case 3:
+                a = AgentType.AGENT_RANDOM;
+        }
+        return false;
+    }
+    
+    private boolean search(String output){
+        System.out.println("What format??");
+        Scanner in = new Scanner(System.in);
+        String opponent = in.nextLine();
+        send(OUTPUT_SEARCH + opponent);
+        return false;
+    }
+    
     private boolean parseoutput(String output){
         if(output.equals(COMMAND_LOGIN)){
             return login(output);
@@ -298,7 +329,7 @@ public class PSDAISocket extends WebSocketClient {
             return(acceptchallenge(output));
         }
         else if(output.equals(COMMAND_REJECT)){
-            
+            return(rejectchallenge(output));
         }
         else if(output.startsWith(COMMAND_ACCEPTALL)){
             autoaccept = !autoaccept;
@@ -306,7 +337,11 @@ public class PSDAISocket extends WebSocketClient {
             return false;
         }
         else if(output.equals(COMMAND_SEARCH)){
-            
+            return search(output);
+        }
+        else if(output.equals(COMMAND_AIMODE)){
+            return changemode(output);
+                    
         }
         else if(output.equals(COMMAND_HELP)){
             return showhelp(output);

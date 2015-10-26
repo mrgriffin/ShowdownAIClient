@@ -164,7 +164,8 @@ public class Pokemon {
             for(int i = 0; i < mov.length(); i++){
                 moves.add(new Move(mov.getString(i)));
             }
-            JSONObject speciesdata = Databases.pokedex.get(species.toLowerCase().replaceAll("-", ""));
+            species = species.toLowerCase().replaceAll("-", "").replaceAll(" ", "").replaceAll("\\.", "").replaceAll("'", "");
+            JSONObject speciesdata = Databases.pokedex.get(species);
             JSONArray stypes = speciesdata.getJSONArray("types");
             type1 = stypes.getString(0);
             type2 = "";
@@ -191,7 +192,8 @@ public class Pokemon {
     public Pokemon(String pspecies, int level){
         try{
             species = pspecies;
-            JSONObject speciesdata = Databases.pokedex.get(pspecies.toLowerCase().replaceAll("-", ""));
+            species = species.toLowerCase().replaceAll("-", "").replaceAll(" ", "").replaceAll("\\.", "");
+            JSONObject speciesdata = Databases.pokedex.get(species);
             JSONArray stypes = speciesdata.getJSONArray("types");
             type1 = stypes.getString(0);
             type2 = "";

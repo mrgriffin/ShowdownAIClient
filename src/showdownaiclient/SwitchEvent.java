@@ -3,15 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package showdownaiclient;
 
 /**
  *
- * @author Scott
+ * @author Admin
  */
-public enum AgentType {
-    AGENT_RANDOM,
-    AGENT_MANUAL,
-    AGENT_TESTING
+public interface SwitchEvent{
+    void onSwitch(WorldState w, Pokemon p1, Pokemon p2);
 }

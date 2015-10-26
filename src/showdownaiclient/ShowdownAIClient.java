@@ -34,6 +34,7 @@ public class ShowdownAIClient {
         try{
             Databases.init();
             URI uri = new URI("ws://localhost:8000/showdown/websocket");
+            //URI uri = new URI("ws://sim.smogon.com:8000/showdown/websocket");
             sock = new PSDAISocket(uri);
             sock.connect();
             while(true){

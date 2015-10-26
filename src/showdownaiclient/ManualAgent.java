@@ -5,14 +5,19 @@
  */
 package showdownaiclient;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Admin
  */
 public class ManualAgent extends Agent {
-
+    public ManualAgent(String room, PSDAISocket socks){
+        super(room, socks);
+    }
+    
     @Override
-    public String decide() {
+    public String decide(ArrayList<String> choices) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

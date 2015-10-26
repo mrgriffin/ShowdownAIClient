@@ -15,10 +15,15 @@ public class Room {
     String whoami;
     String myusername;
     Agent player;
-    public Room(String rname, String uname){
+    public Room(String rname, String uname, AgentType a, PSDAISocket socks){
         id = rname;
         myusername = uname;
-        player = new TestingAgent();
+        if(a == AgentType.AGENT_TESTING){
+            player = new TestingAgent(rname, socks);
+        }
+        else if(a == AgentType.AGENT_RANDOM){
+            player = new RandomAgent(rname, socks);
+        }
     }
     public void process(String line){
         player.updateWorldState(line);

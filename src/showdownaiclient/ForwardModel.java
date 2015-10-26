@@ -12,14 +12,17 @@ import java.util.ArrayList;
  * @author Admin
  */
 public class ForwardModel {
-    public ForwardModel(ArrayList<Pokemon> team, Pokemon popponent){
+    Pokemon myact;
+    ArrayList<Pokemon> myteam;
+    Pokemon opponent;
+    WorldState alphaworld;
+    public ForwardModel(ArrayList<Pokemon> team, String id){
         myteam = new ArrayList<Pokemon>();
         for(int i = 0; i < team.size(); i++){
             myteam.add(new Pokemon(team.get(i)));
         }
-        myact = myteam.get(0);
-        opponent = new Pokemon(popponent);
-        alphaworld = new WorldState(myact, myteam, opponent);
+        myact = null;
+        opponent = null;
     }
     public ForwardModel(WorldState w){
         alphaworld = w;
@@ -52,8 +55,5 @@ public class ForwardModel {
     
     
     
-    Pokemon myact;
-    ArrayList<Pokemon> myteam;
-    Pokemon opponent;
-    WorldState alphaworld;
+    
 }
