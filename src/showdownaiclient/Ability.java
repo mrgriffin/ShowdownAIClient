@@ -64,6 +64,7 @@ public class Ability {
             case "adaptability":
                 onBeforeMove = (WorldState w, Pokemon p1, Pokemon p2, Move m) -> 
                     {m.stab = 2;};
+                break;
             case "aftermath":
                 onAfterDamage = (WorldState w, Pokemon me, Pokemon them, Move m)->
                     {
@@ -72,6 +73,7 @@ public class Ability {
                             them.indirectDamage(them.maxHp / 4);
                         }
                     };
+                break;
             case "aerilate":
                 onBeforeMove = (WorldState w, Pokemon me, Pokemon them, Move m)->{
                     if(m.type.equals("Normal") && m.name.equals("naturalgift") == false){
@@ -79,17 +81,20 @@ public class Ability {
                         m.tMultiplier *= 1.3;
                     }
                 };
+                break;
             case "airlock":
                 onTurnStart = (WorldState w)->
                 {
                     w.ignoreWeather();
                 };
+                break;
             case "analytic":
                 onBeforeDamage = (WorldState w, Pokemon me, Pokemon them, Move m)->{
                     if(me.moved){
                         m.tMultiplier *= 1.3;
                     }
                 };
+                break;
             case "angerpoint":
                 onAfterDamage = (WorldState w, Pokemon me, Pokemon them, Move m)->
                 {
@@ -98,6 +103,7 @@ public class Ability {
                         me.boostStat("attack", 12, me);
                     }
                 };
+                break;
             //I'm not implementing this because anticipation is worthless to our AI
             //case "anticipation":
             case "arenatrap":
@@ -106,6 +112,7 @@ public class Ability {
                         them.addVolatile("vtrapped", 1);
                     }
                 };
+                break;
             case "aromaveil":
                 onBeforeDamage = (WorldState w, Pokemon me, Pokemon them, Move m)->
                 {
@@ -115,48 +122,57 @@ public class Ability {
                         m.nullify();
                     }
                 };
+                break;
             case "aurabreak":
                 onUpdatePokemon=(WorldState w, Pokemon me, Pokemon them)->{
                     them.addVolatile("aurabreak", 1);
                 };
+                break;
             case "baddreams":
                 onResidual=(WorldState w, Pokemon me, Pokemon them)->{
                     if(them.status.equals("sleep")){
                         them.indirectDamage(them.maxHp/8);
                     }
                 };
+                break;
             case "battlearmor":
                 onBeforeDamage=(WorldState w, Pokemon me, Pokemon them, Move m)->{
                     m.crit = false;
                 };
+                break;
             case "bigpecks":
                 onUpdatePokemon=(WorldState w, Pokemon me, Pokemon them)->{
                     me.addEffectResist("defdown", 0);
                 };
+                break;
             case "blaze":
                 onBeforeMove=(WorldState w, Pokemon me, Pokemon them, Move m)->{
                     if(m.type.equals("Fire") && me.hp <= me.hp/3){
                         m.tMultiplier *= 1.5;
                     }
                 };
+                break;
             case "bulletproof":
                 onBeforeDamage=(WorldState w, Pokemon me, Pokemon them, Move m)->{
                     if(m.flags.containsKey("bullet")){
                         m.nullify();
                     }
                 };
+                break;
             case "cheekpouch":
                 onItemUse= (Pokemon user, Item i)->{
                    if(i.category.equals("berry")){
                        user.heal(user.maxHp/3);
                    } 
                 };
+                break;
             case "chlorophyll":
                 onUpdatePokemon=(WorldState w, Pokemon me, Pokemon them)->{
                     if(w.getWeather().equals("sunny")){
                         me.tempModify("speed", 2);
                     }
                 };
+                break;
             case "clearbody":
                 onUpdatePokemon=(WorldState w, Pokemon me, Pokemon them) -> {
                     me.addEffectResist("atkdown", 0);
@@ -167,10 +183,12 @@ public class Ability {
                     me.addEffectResist("evadown", 0);
                     me.addEffectResist("spedown", 0);
                 };
+                break;
             case "cloudnine":
                 onTurnStart = (WorldState w)->{
                     w.ignoreWeather();
                 };
+                break;
             case "colorchange":
                 onAfterDamage=(WorldState w, Pokemon me, Pokemon them, Move m)->{
                     if(m.category.equals("support") == false){
@@ -178,20 +196,24 @@ public class Ability {
                         me.type1 = m.type;
                     }
                 };
+                break;
             case "competitive":
                 onBoost=(Pokemon me, Pokemon them, String stat, int value)->{
                     if(me != them && value < 0){
                         me.boostStat("sattack", value, me);
                     }
                 };
+                break;
             case "compoundeyes":
                 onBeforeMove=(WorldState w,Pokemon me, Pokemon them, Move m)->{
                     m.aMultiplier *= 1.3;
                 };
+                break;
             case "contrary":
                 onBoost=(Pokemon me, Pokemon them, String stat, int value)->{
                     me.boostStatBypass(name, value * -2);
                 };
+                break;
             case "cursedbody":
                 onAfterDamage=(WorldState w, Pokemon me, Pokemon  them, Move m)->{
                     for(Move mov : me.moves){
@@ -202,6 +224,7 @@ public class Ability {
                     m.disabled = true;
                     m.disint = 3;
                 };
+                break;
             case "cutecharm":
                 onAfterDamage=(WorldState w, Pokemon me, Pokemon them, Move m)->{
                     if(m.flags.containsKey("contact") && me.gender != 0
@@ -211,12 +234,14 @@ public class Ability {
                         }
                     }
                 };
+                break;
             case "damp":
                 onBeforeDamage=(WorldState w, Pokemon me, Pokemon them, Move m)->{
                     if(m.name.equals("explosion") && m.name.equals("selfdestruct")){
                         m.nullify();
                     }
                 };
+                break;
             case "darkaura":
                 onBeforeMove=(WorldState w, Pokemon me, Pokemon them, Move m)->{
                     if(m.type.equals("Dark")){                    
@@ -228,24 +253,27 @@ public class Ability {
                         }
                     }
                 };
+                break;
             case "defeatist":
                 onBeforeMove=(WorldState w, Pokemon me, Pokemon them, Move m)->{
                     if(me.hp <= me.maxHp/2){
                         m.tMultiplier *= 0.5;
                     }
                 };
+                break;
             case "defiant":
                 onBoost=(Pokemon me, Pokemon them, String stat, int value)->{
                     if(me != them && value < 0){
                         me.boostStatBypass("attack", 2);
                     }
                 };
+                break;
                 
             //Sticking to OU and random play, so this will almost never come up
             //case "deltastream":
             //Ubers exclusive
-            //case "desoateand":
-            case "downlaod":
+            //case "desolateland":
+            case "download":
                 onSwitchIn=(WorldState w, Pokemon me, Pokemon them)->{
                     if(them.Stats.get("defense") < them.Stats.get("sdefense")){
                         me.boostStatBypass("attack", 1);
@@ -254,14 +282,17 @@ public class Ability {
                         me.boostStatBypass("sattack", 1);
                     }
                 };
+                break;
             case "drizzle":
                 onSwitchIn=(WorldState w, Pokemon me, Pokemon them)->{
                     w.setWeather("rainy", -1);
                 };
+                break;
             case "drought":
                 onSwitchIn=(WorldState w, Pokemon me, Pokemon them)->{
                     w.setWeather("sunny", -1);
                 };
+                break;
             case "dryskin":
                 onBeforeDamage=(WorldState w, Pokemon me, Pokemon other, Move m)->{
                     if(m.type == "Fire"){
@@ -280,12 +311,14 @@ public class Ability {
                         me.heal(me.maxHp/4);
                     }
                 };
+                break;
             case "earlybird":
                 onResidual=(WorldState w, Pokemon me, Pokemon other)->{
                     if(me.status.equals("sleep")){
                         me.statusRemaining--;
                     }
                 };
+                break;
             case "effectspore":
                 onAfterDamage=(WorldState w, Pokemon me, Pokemon them, Move m)->{
                     if(m.flags.containsKey("contact") && them.status.equals("")
@@ -302,6 +335,7 @@ public class Ability {
                         }
                     }
                 };
+                break;
             case "fairyaura":
                 onBeforeMove=(WorldState w, Pokemon me, Pokemon them, Move m)->{
                     if(m.type.equals("Fairy")){                    
@@ -313,12 +347,14 @@ public class Ability {
                         }
                     }
                 };
+                break;
             case "filter":
                 onBeforeDamage=(WorldState w, Pokemon me, Pokemon them, Move m)->{
                     if(me.getResist(m.type) > 1){
                         m.tMultiplier *= 0.75;
                     }
                 };
+                break;
             case "flamebody":
                 onAfterDamage=(WorldState w, Pokemon me, Pokemon them, Move m)->{
                     if(m.flags.containsKey("contact")){
@@ -333,6 +369,7 @@ public class Ability {
                         m.tMultiplier *= 1.5;
                     }
                 };
+                break;
             case "flashfire":
                 onAfterDamage=(WorldState w, Pokemon me, Pokemon them, Move m)->{
                     if(m.type.equals("Fire")){
@@ -345,6 +382,7 @@ public class Ability {
                         m.tMultiplier *= 1.5;
                     }
                 };
+                break;
             case "flowergift":
                 onBeforeMove=(WorldState w, Pokemon me, Pokemon them, Move m)->{
                     if(w.getWeather().equals("sunny")){
@@ -352,6 +390,7 @@ public class Ability {
                         me.tempModify("sdefense", 1.5);
                     }
                 };
+                break;
             case "forecast":
                 onUpdatePokemon=(WorldState w, Pokemon me, Pokemon them)->{
                     if(me.species.equals("Castform") == false){
@@ -369,6 +408,7 @@ public class Ability {
                         }
                     }
                 };
+                break;
             //case "forewarn":  pointless
             //case "friendguard" pointless
             //case "frisk"  pointless
@@ -376,22 +416,26 @@ public class Ability {
                 onUpdatePokemon=(WorldState w, Pokemon me, Pokemon them)->{
                     me.tempModify("defense", 2);
                 };
+                break;
             case "galewings":
                 onBeforeMove=(WorldState w, Pokemon me, Pokemon them, Move m)->{
                     if(m.type == "Flying"){
                         m.pmod++;
                     }
                 };
+                break;
             case "gluttony":
                 onUpdatePokemon=(WorldState w, Pokemon me, Pokemon then)->{
                     me.addVolatile("gluttony", 1);
                 };
+                break;
             case "gooey":
                 onAfterDamage=(WorldState w, Pokemon me, Pokemon them, Move m)->{
                     if(m.flags.containsKey("contact")){
                         them.boostStat("speed", -1, me);
                     }
                 };
+                break;
             //Not bothering with this one
             //case "grasspelt":
             case "guts":
@@ -401,6 +445,7 @@ public class Ability {
                         me.addVolatile("guts", 1);
                     }
                 };
+                break;
             case "harvest":
                 onResidual=(WorldState w, Pokemon me, Pokemon them)->{
                     if(me.iconsumed && me.hitem.category.equals("berry")){
@@ -409,8 +454,9 @@ public class Ability {
                         }
                     }
                 };
-                //double battle exclusive
-                //case "healer":
+                break;
+            //double battle exclusive
+            //case "healer":
             case "heatproof":
                 onBeforeDamage=(WorldState w, Pokemon me, Pokemon them, Move m)->{
                     if(m.type.equals("Fire")){
@@ -421,16 +467,19 @@ public class Ability {
                 onUpdatePokemon=(WorldState w, Pokemon me, Pokemon them)->{
                     me.addEffectResist("burn", 0.5);
                 };
+                break;
             case "heavymetal":
                 onUpdatePokemon=(WorldState w, Pokemon me, Pokemon them)->{
                     me.tempModify("weight", 2);
                 };
+                break;
             //no competitive use
             //case "honeygather:
             case "hugepower":
                 onUpdatePokemon=(WorldState w, Pokemon me, Pokemon them)->{
                     me.tempModify("attack", 2);
                 };
+                break;
             case "hustle":
                 onUpdatePokemon=(WorldState w, Pokemon me, Pokemon them)->{
                     me.tempModify("attack", 1.5);
@@ -440,16 +489,19 @@ public class Ability {
                         m.aMultiplier *= 0.8;
                     }
                 };
+                break;
             case "hydration":
                 onResidual=(WorldState w, Pokemon me, Pokemon them)->{
                     if(w.getWeather().equals("rainy")){
                         me.cure();
                     }
                 };
+                break;
             case "hypercutter":
                 onUpdatePokemon=(WorldState w, Pokemon me, Pokemon them)->{
                     me.addEffectResist("atkdown", 0);
                 };
+                break;
             //imperfect information means that illusion is worthless to us
             //case "illusion":
             case "icebody":
@@ -461,6 +513,7 @@ public class Ability {
                 onUpdatePokemon=(WorldState w, Pokemon me, Pokemon them)->{
                     me.addEffectResist("hail", 0);
                 };
+                break;
             case "immunity":
                 onUpdatePokemon=(WorldState w, Pokemon me, Pokemon them)->{
                     if(me.status.equals("poison")){
@@ -468,6 +521,7 @@ public class Ability {
                     }
                     me.addEffectResist("poison", 0);
                 };
+                break;
             case "imposter":
                 onSwitchIn=(WorldState w, Pokemon me, Pokemon them)->{
                     me.Stats = new HashMap<String, Integer>(them.Stats);
@@ -477,14 +531,17 @@ public class Ability {
                     me.weight = them.weight;
                     me.height = them.height;
                 };
+                break;
             case "infiltrator":
                 onBeforeMove=(WorldState w, Pokemon me, Pokemon them, Move m)->{
                     m.infiltrate = true;
                 };
+                break;
             case "innerfocus":
                 onUpdatePokemon=(WorldState w, Pokemon me, Pokemon them)->{
                     me.addEffectResist("flinch", 0);
                 };
+                break;
             case "insomnia":
                 onUpdatePokemon=(WorldState w, Pokemon me, Pokemon them)->{
                     if(me.status.equals("sleep")){
@@ -492,28 +549,33 @@ public class Ability {
                     }
                     me.addEffectResist("sleep", 0);
                 };
+                break;
             case "intimidate":
                 onSwitchIn=(WorldState w, Pokemon me, Pokemon them)->{
                     them.boostStat("attack", -1, me);
                 };
+                break;
             case "ironbarbs":
                 onAfterDamage=(WorldState w, Pokemon me, Pokemon them, Move m)->{
                     if(m.flags.containsKey("contact")){
                         them.indirectDamage(them.maxHp/8);
                     }
                 };
+                break;
             case "ironfist":
                 onBeforeMove=(WorldState w, Pokemon me, Pokemon them, Move m)->{
                     if(m.flags.containsKey("punch")){
                         m.tMultiplier *= 1.2;
                     }
                 };
+                break;
             case "justified":
                 onAfterDamage = (WorldState w, Pokemon me, Pokemon them, Move m)->{
                     if(m.type.equals("Dark")){
                         me.boostStat("attack", 1, me);
                     }
                 };
+                break;
             case "keeneye":
                 onUpdatePokemon=(WorldState w, Pokemon me, Pokemon them)->{
                     me.addEffectResist("accdown", 0);
@@ -521,10 +583,12 @@ public class Ability {
                 onBeforeMove=(WorldState w, Pokemon me, Pokemon them, Move m)->{
                     m.ignoreeva= true;
                 };
+                break;
             case "klutz":
                 onUpdatePokemon = (WorldState w, Pokemon me, Pokemon them)->{
                     me.itemlocked = true;
                 };
+                break;
             case "leafguard":
                 onUpdatePokemon = (WorldState w, Pokemon me, Pokemon them) ->{
                     if(w.getWeather().equals("sunny")){
@@ -535,16 +599,19 @@ public class Ability {
                         me.addEffectResist("sleep", 0);
                     }
                 };
+                break;
             case "levitate":
                 onBeforeDamage=(WorldState w, Pokemon me, Pokemon them, Move m)->{
                     if(me.volatiles.containsKey("grounded") == false || m.type.equals("Ground")){
                         m.nullify();
                     }
                 };
+                break;
             case "lightmetal":
                 onUpdatePokemon=(WorldState w, Pokemon me, Pokemon them)->{
                     me.tempModify("weight", 0.5);
                 };
+                break;
             case "lightningrod":
                 onBeforeDamage=(WorldState w, Pokemon me, Pokemon them, Move m)->{
                     if(m.type.equals("Electric")){
@@ -552,16 +619,19 @@ public class Ability {
                         me.boostStat("sattack", 1, me);
                     }
                 };
+                break;
             case "limber":
                 onUpdatePokemon=(WorldState w, Pokemon me, Pokemon them)->{
                     me.addEffectResist("paralyze", 0);
                 };
+                break;
             case "liquidooze":
                 onBeforeDamage=(WorldState w, Pokemon me, Pokemon them, Move m)->{
                     if(m.flags.containsKey("drain")){
                         m.oozed = true;
                     }
                 };
+                break;
             case "magicbounce":
                 onBeforeDamage=(WorldState w, Pokemon me, Pokemon them, Move m)->{
                     if(m.flags.containsKey("reflectable")){
@@ -572,11 +642,12 @@ public class Ability {
                         m.nullify();
                     }
                 };
+                break;
             case "magicguard":
                 onBeforeDamage=(WorldState w, Pokemon me, Pokemon them, Move m)->{
                     me.indimmune = true;
                 };
-            
+                break;
         }
     }
 }
